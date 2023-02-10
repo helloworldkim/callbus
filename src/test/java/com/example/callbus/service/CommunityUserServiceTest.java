@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.annotation.Rollback;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,7 +40,7 @@ class CommunityUserServiceTest {
         when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
 
         //when
-        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(dto.toEntity());
+        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(dto);
 
         //then
         assertThat(commuityUserResDTO.getNickname()).isEqualTo(dto.getNickname());

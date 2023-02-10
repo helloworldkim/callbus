@@ -39,9 +39,7 @@ public class UserController {
             throw new RuntimeException(errorMap.toString());
         }
 
-        CommunityUser communityUser = communityUserReqDto.toEntity();
-
-        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(communityUser);
+        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(communityUserReqDto);
 
 
         CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("가입테스트").body(null).build();

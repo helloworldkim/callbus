@@ -2,6 +2,7 @@ package com.example.callbus.entity;
 
 import com.example.callbus.enums.AccountType;
 import com.example.callbus.web.response.CommuityUserResDTO;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunityUser {
 
     @Id
