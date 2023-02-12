@@ -25,7 +25,7 @@ public class UserController {
     private final CommunityUserService communityUserService;
 
 
-    @PostMapping("/api/v1/test")
+    @PostMapping("/api/v1/regist")
     public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto, BindingResult bindingResult) {
 
         /* Validation 에러확인 */
@@ -39,7 +39,7 @@ public class UserController {
             throw new RuntimeException(errorMap.toString());
         }
 
-        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(communityUserReqDto);
+        CommuityUserResDTO commuityUserResDTO = communityUserService.saveUser(communityUserReqDto);
 
 
         CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("가입테스트").body(null).build();

@@ -1,12 +1,11 @@
 package com.example.callbus.web.response;
 
 import com.example.callbus.entity.CommunityUser;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class BoardResDto {
 
     private Long id;

@@ -2,6 +2,7 @@ package com.example.callbus.entity;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,11 @@ public class BoardLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_user_id")
     private CommunityUser communityUser;
+
+    @Builder
+    public BoardLike(Long id, Board board, CommunityUser communityUser) {
+        this.id = id;
+        this.board = board;
+        this.communityUser = communityUser;
+    }
 }

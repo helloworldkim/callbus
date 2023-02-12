@@ -49,6 +49,14 @@ public class Board {
                 .build();
     }
 
+    public BoardResDto toNoUserDTO() {
+        return BoardResDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .build();
+    }
+
     //================================================================
     // UPDATE
     //================================================================
