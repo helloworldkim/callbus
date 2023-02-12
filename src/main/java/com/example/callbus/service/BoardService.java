@@ -33,7 +33,7 @@ public class BoardService {
     @Transactional(rollbackFor = RuntimeException.class)
     public BoardResDto saveBoard(BoardReqDto dto, String accountId) {
 
-        Optional<CommunityUser> user = communityUserRepository.findByAccountId(accountId);
+        Optional<CommunityUser> user = communityUserRepository.findCommunityUserByAccountId(accountId);
 
         if (user.isPresent()) {
             CommunityUser communityUser = user.get();
@@ -55,7 +55,7 @@ public class BoardService {
     @Transactional(rollbackFor = RuntimeException.class)
     public BoardResDto findBoard(Long boardId) {
 
-        Optional<Board> findedBoard = boardRepository.findById(boardId);
+        Optional<Board> findedBoard = boardRepository.findBoardAndUser(boardId);
 
         if (findedBoard.isPresent()) {
             Board board = findedBoard.get();
@@ -73,7 +73,8 @@ public class BoardService {
      */
     public BoardListResDto findBoardList() {
 
-        List<Board> list = boardRepository.findAll();
+//        List<Board> list = boardRepository.findAll();
+        List<Board> list = boardRepository.findBoardList();
 
         if (list.isEmpty()) {
             throw new RuntimeException("게시글을 찾을 수 없습니다.");
@@ -81,7 +82,7 @@ public class BoardService {
 
         List<BoardResDto> boardResDtoList = list.stream()
                                         .map((board) -> {
-                                            return board.toNoUserDTO();
+                                            return board.toDTO();
                                         })
                                         .collect(Collectors.toList());
         BoardListResDto boardListResDto = BoardListResDto.builder().items(boardResDtoList).build();

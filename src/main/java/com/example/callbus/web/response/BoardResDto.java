@@ -12,12 +12,14 @@ public class BoardResDto {
     private String title;
     private String content;
     private CommunityUser communityUser;
+    private int cnt;
 
     @Builder
-    public BoardResDto(Long id, String title, String content, CommunityUser communityUser) {
+    public BoardResDto(Long id, String title, String content, CommunityUser communityUser, int cnt) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.cnt = cnt;
         this.communityUser = communityUser;
     }
 }

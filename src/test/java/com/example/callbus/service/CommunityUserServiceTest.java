@@ -40,7 +40,7 @@ class CommunityUserServiceTest {
         when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
 
         //when
-        CommuityUserResDTO commuityUserResDTO = communityUserService.userSave(dto);
+        CommuityUserResDTO commuityUserResDTO = communityUserService.saveUser(dto);
 
         //then
         assertThat(commuityUserResDTO.getNickname()).isEqualTo(dto.getNickname());

@@ -35,9 +35,9 @@ public class CommunityUserService {
      * @param accountId
      * @return
      */
-    public CommuityUserResDTO findUser(String accountId) {
+    public CommuityUserResDTO findCommunityUserByAccountId(String accountId) {
 
-        Optional<CommunityUser> user = commuityUserRepository.findByAccountId(accountId);
+        Optional<CommunityUser> user = commuityUserRepository.findCommunityUserByAccountId(accountId);
         if (user.isPresent()) {
             return user.get().toDTO();
         } else {

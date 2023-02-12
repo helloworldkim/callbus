@@ -28,6 +28,9 @@ public class Board {
     @JoinColumn(name = "community_user_id")
     private CommunityUser communityUser;
 
+    @Transient
+    private int cnt;
+
     @Builder
     public Board(Long id, String title, String content, CommunityUser communityUser) {
         this.id = id;
@@ -46,6 +49,7 @@ public class Board {
                 .title(this.title)
                 .content(this.content)
                 .communityUser(this.communityUser)
+                .cnt(this.cnt)
                 .build();
     }
 
@@ -54,6 +58,7 @@ public class Board {
                 .id(this.id)
                 .title(this.title)
                 .content(this.content)
+                .cnt(this.cnt)
                 .build();
     }
 

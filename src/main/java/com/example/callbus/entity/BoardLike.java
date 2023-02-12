@@ -1,6 +1,8 @@
 package com.example.callbus.entity;
 
 
+import com.example.callbus.web.response.BoardLikeResDto;
+import com.example.callbus.web.response.BoardResDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class BoardLike {
 
     @Id
@@ -31,5 +33,17 @@ public class BoardLike {
         this.id = id;
         this.board = board;
         this.communityUser = communityUser;
+    }
+
+    //================================================================
+    // DTO변환
+    //================================================================
+
+    public BoardLikeResDto toDTO() {
+        return BoardLikeResDto.builder()
+                .id(this.id)
+                .board(this.board)
+                .communityUser(this.communityUser)
+                .build();
     }
 }
