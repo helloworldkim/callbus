@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "COMMUNITY_USER")
 public class CommunityUser {
 
     @Id
@@ -18,6 +19,7 @@ public class CommunityUser {
     private Long id;
     private String nickname;
     @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
     private AccountType accountType;
     @Transient
     private String accountTypeName;

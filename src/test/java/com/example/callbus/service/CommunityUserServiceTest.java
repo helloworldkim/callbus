@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +29,7 @@ class CommunityUserServiceTest {
 
     @Test
     @DisplayName("회원가입 테스트")
-    void userSave() {
+    void saveUser() {
 
         //given
         CommunityUserReqDto dto = new CommunityUserReqDto();
@@ -41,6 +43,34 @@ class CommunityUserServiceTest {
 
         //when
         CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(dto);
+
+        //then
+        assertThat(communityUserResDTO.getNickname()).isEqualTo(dto.getNickname());
+        assertThat(communityUserResDTO.getAccountId()).isEqualTo(dto.getAccountId());
+        assertThat(communityUserResDTO.getAccountType().name()).isEqualTo(dto.getAccountType());
+        assertThat(communityUserResDTO.getQuit()).isEqualTo(dto.getQuit());
+
+    }
+
+    @Test
+    @DisplayName("회원 조회 테스트")
+    void findCommunityUserByAccountId() {
+
+        //given
+        final String accountId = "123";
+        CommunityUserReqDto dto = new CommunityUserReqDto();
+        dto.setNickname("john");
+        dto.setAccountId("123");
+        dto.setAccountType(AccountType.REALTOR.name());
+        dto.setQuit("N");
+        when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
+        communityUserService.saveUser(dto);
+
+        //stub
+        when(communityUserRepository.findCommunityUserByAccountId(any())).thenReturn(Optional.ofNullable(dto.toEntity()));
+
+        //when
+        CommunityUserResDTO communityUserResDTO = communityUserService.findCommunityUserByAccountId(accountId);
 
         //then
         assertThat(communityUserResDTO.getNickname()).isEqualTo(dto.getNickname());

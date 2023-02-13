@@ -43,9 +43,8 @@ public class BoardService {
      * @return
      */
     @Transactional
-    public BoardResDto findBoard(Long boardId, String accountId) {
+    public BoardResDto findBoard(Long boardId) {
 
-        communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("대상 회원이 없습니다."));
         Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
 
         return board.toDTO();
@@ -57,7 +56,7 @@ public class BoardService {
      * @return
      */
     @Transactional
-    public BoardListResDto findBoardList(String accountId) {
+    public BoardListResDto findBoardList() {
 
         List<Board> list = boardRepository.findBoardList();
         if (list.isEmpty()) {

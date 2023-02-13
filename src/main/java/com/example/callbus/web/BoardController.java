@@ -25,11 +25,10 @@ public class BoardController {
      * @throws Exception
      */
     @GetMapping("/api/v1/board/list")
-    private ResponseEntity<?> findBoardList(HttpServletRequest request) throws Exception{
-        String accountId = (String) request.getAttribute("accountId");
+    private ResponseEntity<?> findBoardList() throws Exception{
 
 
-        BoardListResDto BoardListResDto = boardService.findBoardList(accountId);
+        BoardListResDto BoardListResDto = boardService.findBoardList();
 
         CommonResponseDto<?> data = CommonResponseDto.builder()
                 .code(HttpStatus.OK.value())
@@ -41,10 +40,9 @@ public class BoardController {
     }
 
     @GetMapping("/api/v1/board/{boardId}")
-    private ResponseEntity<?> findBoardById(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
-        String accountId = (String) request.getAttribute("accountId");
+    private ResponseEntity<?> findBoardById(@PathVariable Long boardId) throws Exception{
 
-        BoardResDto boardResDto = boardService.findBoard(boardId, accountId);
+        BoardResDto boardResDto = boardService.findBoard(boardId);
 
         CommonResponseDto<?> data = CommonResponseDto.builder()
                 .code(HttpStatus.OK.value())

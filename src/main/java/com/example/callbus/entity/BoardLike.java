@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "BOARD_LIKE")
 public class BoardLike {
 
     @Id

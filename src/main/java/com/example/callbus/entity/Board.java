@@ -4,9 +4,7 @@ package com.example.callbus.entity;
 import com.example.callbus.web.request.board.BoardReqDto;
 import com.example.callbus.web.response.board.BoardResDto;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Formula;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "BOARD")
 public class Board {
 
     @Id
@@ -34,9 +33,12 @@ public class Board {
     @Formula("(select count(*) from board_like bl where bl.board_id = board_id)")
     private int likeCount;
     @CreatedDate
+    @Column(name = "created_date_time")
     private LocalDateTime createdDateTime;
     @LastModifiedDate
+    @Column(name = "last_modified_date_time")
     private LocalDateTime lastModifiedDateTime;
+    @Column(name = "delete_yn")
     private String deleteYn;
     @Transient
     private String likeYn;
