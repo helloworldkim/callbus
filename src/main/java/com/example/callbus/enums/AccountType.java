@@ -1,18 +1,22 @@
 package com.example.callbus.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
+@AllArgsConstructor
 public enum AccountType {
-    REALTOR("공인중개사"),LESSOR("임대인"),LESSEE("임차인"),OTHER("외부사용자");
+    REALTOR("REALTOR", "공인중개사"),
+    LESSOR("LESSOR", "임대인"),
+    LESSEE("LESSEE", "임차인"),
+    OTHER("OTHER", "외부사용자");
 
+    private final String role;
     private final String code;
-
-    AccountType(String code) {
-        this.code = code;
-    }
 
     public static String getAccountTypeName(AccountType accountType) {
         AccountType matchedType = Arrays.stream(AccountType.values())

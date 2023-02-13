@@ -1,7 +1,9 @@
 package com.example.callbus.web;
 
 
+import com.example.callbus.enums.AccountType;
 import com.example.callbus.service.CommunityUserService;
+import com.example.callbus.web.annotation.PreAuthorize;
 import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
 import com.example.callbus.web.response.CommonResponseDto;
 import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
@@ -29,6 +31,7 @@ public class UserController {
      * @param bindingResult
      * @return
      */
+    @PreAuthorize(hasRole = {AccountType.OTHER})
     @PostMapping("/api/v1/regist")
     public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto, BindingResult bindingResult) {
 

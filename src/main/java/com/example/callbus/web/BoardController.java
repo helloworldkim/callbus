@@ -1,6 +1,8 @@
 package com.example.callbus.web;
 
+import com.example.callbus.enums.AccountType;
 import com.example.callbus.service.BoardService;
+import com.example.callbus.web.annotation.PreAuthorize;
 import com.example.callbus.web.request.board.BoardReqDto;
 import com.example.callbus.web.response.boardlike.BoardListResDto;
 import com.example.callbus.web.response.board.BoardResDto;
@@ -24,9 +26,10 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR, AccountType.OTHER})
     @GetMapping("/api/v1/board/list")
-    private ResponseEntity<?> findBoardList() throws Exception{
-
+    private ResponseEntity<?> findBoardList(HttpServletRequest request) throws Exception{
+        String accountId = (String) request.getAttribute("accountId");
 
         BoardListResDto BoardListResDto = boardService.findBoardList();
 
@@ -39,8 +42,17 @@ public class BoardController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    /**
+     * 게시글 단건 조회
+     * @param boardId
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR, AccountType.OTHER})
     @GetMapping("/api/v1/board/{boardId}")
-    private ResponseEntity<?> findBoardById(@PathVariable Long boardId) throws Exception{
+    private ResponseEntity<?> findBoardById(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
+        String accountId = (String) request.getAttribute("accountId");
 
         BoardResDto boardResDto = boardService.findBoard(boardId);
 
@@ -59,6 +71,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PostMapping("/api/v1/board")
     private ResponseEntity<?> saveBoard(@RequestBody @Valid BoardReqDto dto, HttpServletRequest request) throws Exception {
         String accountId = (String) request.getAttribute("accountId");
@@ -76,6 +89,7 @@ public class BoardController {
      * @param boardId
      * @return
      */
+    @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PutMapping("/api/v1/board/{boardId}")
     private ResponseEntity<?> updateBoard(@RequestBody @Valid BoardReqDto dto, @PathVariable Long boardId) throws Exception {
         BoardResDto boardResDto = boardService.updateBoard(boardId, dto);
@@ -93,6 +107,7 @@ public class BoardController {
      * @param boardId
      * @return
      */
+    @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @DeleteMapping("/api/v1/board/{boardId}")
     private ResponseEntity<?> deleteBoard(@PathVariable Long boardId) throws Exception {
         boardService.deleteBoard(boardId);
