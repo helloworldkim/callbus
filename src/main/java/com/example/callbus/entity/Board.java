@@ -64,7 +64,7 @@ public class Board {
                 .id(this.id)
                 .title(this.title)
                 .content(this.content)
-                .communityUser(this.communityUser)
+                .communityUser(this.communityUser.toDTO())
                 .likeCount(this.likeCount)
                 .createdDatetime(this.createdDateTime)
                 .lastModifiedDatetime(this.lastModifiedDateTime)

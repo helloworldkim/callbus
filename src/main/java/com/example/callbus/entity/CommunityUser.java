@@ -2,12 +2,10 @@ package com.example.callbus.entity;
 
 import com.example.callbus.enums.AccountType;
 import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+
 
 @Entity
 @Getter
@@ -21,7 +19,8 @@ public class CommunityUser {
     private String nickname;
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
-
+    @Transient
+    private String accountTypeName;
     @Column(name = "account_id", unique = true)
     private String accountId;
     private String quit;

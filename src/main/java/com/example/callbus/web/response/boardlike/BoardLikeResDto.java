@@ -2,10 +2,10 @@ package com.example.callbus.web.response.boardlike;
 
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.*;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -15,6 +15,6 @@ public class BoardLikeResDto {
 
     private Board board;
 
-    private CommunityUser communityUser;
+    private CommunityUserResDTO communityUser;
 
 }

@@ -41,7 +41,7 @@ public class BoardLike {
         return BoardLikeResDto.builder()
                 .id(this.id)
                 .board(this.board)
-                .communityUser(this.communityUser)
+                .communityUser(this.communityUser.toDTO())
                 .build();
     }
 }

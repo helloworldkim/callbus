@@ -1,19 +1,19 @@
 package com.example.callbus.web.response.board;
 
 import com.example.callbus.entity.CommunityUser;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class BoardResDto {
 
     private Long id;
     private String title;
     private String content;
-    private CommunityUser communityUser;
+    private CommunityUserResDTO communityUser;
     private int likeCount;
     private LocalDateTime createdDatetime;
     private LocalDateTime lastModifiedDatetime;
@@ -21,7 +21,7 @@ public class BoardResDto {
     private String likeYn;
 
     @Builder
-    public BoardResDto(Long id, String title, String content, CommunityUser communityUser, int likeCount, LocalDateTime createdDatetime, LocalDateTime lastModifiedDatetime, String deleteYn, String likeYn) {
+    public BoardResDto(Long id, String title, String content, CommunityUserResDTO communityUser, int likeCount, LocalDateTime createdDatetime, LocalDateTime lastModifiedDatetime, String deleteYn, String likeYn) {
         this.id = id;
         this.title = title;
         this.content = content;

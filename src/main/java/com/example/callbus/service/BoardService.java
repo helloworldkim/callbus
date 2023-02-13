@@ -2,7 +2,6 @@ package com.example.callbus.service;
 
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
-import com.example.callbus.repository.BoardLikeRepository;
 import com.example.callbus.repository.BoardRepository;
 import com.example.callbus.repository.CommunityUserRepository;
 import com.example.callbus.web.request.board.BoardReqDto;
@@ -48,8 +47,6 @@ public class BoardService {
 
         communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("대상 회원이 없습니다."));
         Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
-        board.getCommunityUser();
-
 
         return board.toDTO();
 
