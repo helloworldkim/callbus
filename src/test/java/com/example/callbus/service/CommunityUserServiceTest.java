@@ -2,8 +2,8 @@ package com.example.callbus.service;
 
 import com.example.callbus.enums.AccountType;
 import com.example.callbus.repository.CommunityUserRepository;
-import com.example.callbus.web.request.CommunityUserReqDto;
-import com.example.callbus.web.response.CommuityUserResDTO;
+import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,13 +40,13 @@ class CommunityUserServiceTest {
         when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
 
         //when
-        CommuityUserResDTO commuityUserResDTO = communityUserService.saveUser(dto);
+        CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(dto);
 
         //then
-        assertThat(commuityUserResDTO.getNickname()).isEqualTo(dto.getNickname());
-        assertThat(commuityUserResDTO.getAccountId()).isEqualTo(dto.getAccountId());
-        assertThat(commuityUserResDTO.getAccountType().name()).isEqualTo(dto.getAccountType());
-        assertThat(commuityUserResDTO.getQuit()).isEqualTo(dto.getQuit());
+        assertThat(communityUserResDTO.getNickname()).isEqualTo(dto.getNickname());
+        assertThat(communityUserResDTO.getAccountId()).isEqualTo(dto.getAccountId());
+        assertThat(communityUserResDTO.getAccountType().name()).isEqualTo(dto.getAccountType());
+        assertThat(communityUserResDTO.getQuit()).isEqualTo(dto.getQuit());
 
     }
 }

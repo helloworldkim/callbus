@@ -2,13 +2,11 @@ package com.example.callbus.service;
 
 import com.example.callbus.entity.CommunityUser;
 import com.example.callbus.repository.CommunityUserRepository;
-import com.example.callbus.web.request.CommunityUserReqDto;
-import com.example.callbus.web.response.CommuityUserResDTO;
+import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +19,10 @@ public class CommunityUserService {
      * @param dto
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class)
-    public CommuityUserResDTO saveUser(CommunityUserReqDto dto) {
+    @Transactional
+    public CommunityUserResDTO saveUser(CommunityUserReqDto dto) {
 
         CommunityUser savedUser = commuityUserRepository.save(dto.toEntity());
-
         return savedUser.toDTO();
 
     }
@@ -35,14 +32,11 @@ public class CommunityUserService {
      * @param accountId
      * @return
      */
-    public CommuityUserResDTO findCommunityUserByAccountId(String accountId) {
+    @Transactional
+    public CommunityUserResDTO findCommunityUserByAccountId(String accountId) {
 
-        Optional<CommunityUser> user = commuityUserRepository.findCommunityUserByAccountId(accountId);
-        if (user.isPresent()) {
-            return user.get().toDTO();
-        } else {
-            throw new RuntimeException("등록된 회원이 없습니다.");
-        }
+        CommunityUser communityUser = commuityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("등록된 회원이 없습니다."));
+        return communityUser.toDTO();
 
     }
 }

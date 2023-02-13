@@ -1,4 +1,4 @@
-package com.example.callbus.web.request;
+package com.example.callbus.web.request.board;
 
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
@@ -15,7 +15,7 @@ public class BoardReqDto {
     private String title;
     private String content;
     private CommunityUser communityUser;
-
+    private String deleteYn = "N";
 
     public Board toEntity() {
         return Board.builder()
@@ -23,6 +23,7 @@ public class BoardReqDto {
                 .title(this.title)
                 .content(this.content)
                 .communityUser(this.communityUser)
+                .deleteYn(this.deleteYn)
                 .build();
     }
 

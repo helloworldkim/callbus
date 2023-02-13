@@ -1,11 +1,10 @@
 package com.example.callbus.web;
 
 
-import com.example.callbus.entity.CommunityUser;
 import com.example.callbus.service.CommunityUserService;
-import com.example.callbus.web.request.CommunityUserReqDto;
+import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
 import com.example.callbus.web.response.CommonResponseDto;
-import com.example.callbus.web.response.CommuityUserResDTO;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,12 @@ public class UserController {
 
     private final CommunityUserService communityUserService;
 
-
+    /**
+     * 회원등록
+     * @param communityUserReqDto
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/api/v1/regist")
     public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto, BindingResult bindingResult) {
 
@@ -39,10 +43,10 @@ public class UserController {
             throw new RuntimeException(errorMap.toString());
         }
 
-        CommuityUserResDTO commuityUserResDTO = communityUserService.saveUser(communityUserReqDto);
+        CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(communityUserReqDto);
 
 
-        CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("가입테스트").body(null).build();
+        CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("가입테스트").body(communityUserResDTO).build();
         return new ResponseEntity<>(data, HttpStatus.OK);
 
     }

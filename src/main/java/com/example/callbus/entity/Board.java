@@ -1,45 +1,61 @@
 package com.example.callbus.entity;
 
 
-import com.example.callbus.web.request.BoardReqDto;
-import com.example.callbus.web.response.BoardResDto;
-import com.example.callbus.web.response.CommuityUserResDTO;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.callbus.web.request.board.BoardReqDto;
+import com.example.callbus.web.response.board.BoardResDto;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Formula;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
-
     private String title;
     private String content;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_user_id")
     private CommunityUser communityUser;
-
+    @Formula("(select count(*) from board_like bl where bl.board_id = board_id)")
+    private int likeCount;
+    @CreatedDate
+    private LocalDateTime createdDateTime;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDateTime;
+    private String deleteYn;
     @Transient
-    private int cnt;
+    private String likeYn;
+
+    @OneToMany(mappedBy = "board")
+    List<BoardLike> boardLikeList = new ArrayList<>();
 
     @Builder
-    public Board(Long id, String title, String content, CommunityUser communityUser) {
+    public Board(Long id, String title, String content, CommunityUser communityUser, LocalDateTime createdDateTime, LocalDateTime lastModifiedDateTime, String deleteYn, String likeYn) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.communityUser = communityUser;
+        this.createdDateTime = createdDateTime;
+        this.lastModifiedDateTime = lastModifiedDateTime;
+        this.deleteYn = deleteYn;
     }
 
-    //================================================================
+//================================================================
     // DTO변환
     //================================================================
 
@@ -49,18 +65,14 @@ public class Board {
                 .title(this.title)
                 .content(this.content)
                 .communityUser(this.communityUser)
-                .cnt(this.cnt)
+                .likeCount(this.likeCount)
+                .createdDatetime(this.createdDateTime)
+                .lastModifiedDatetime(this.lastModifiedDateTime)
+                .deleteYn(this.deleteYn)
                 .build();
     }
 
-    public BoardResDto toNoUserDTO() {
-        return BoardResDto.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .cnt(this.cnt)
-                .build();
-    }
+
 
     //================================================================
     // UPDATE
@@ -71,4 +83,12 @@ public class Board {
         this.content = dto.getContent();
 
     }
+
+    //================================================================
+    // DELETE
+    //================================================================
+    public void delete() {
+        this.deleteYn = "Y";
+    }
+
 }

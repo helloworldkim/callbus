@@ -1,9 +1,7 @@
 package com.example.callbus.entity;
 
 
-import com.example.callbus.web.response.BoardLikeResDto;
-import com.example.callbus.web.response.BoardResDto;
-import lombok.AccessLevel;
+import com.example.callbus.web.response.boardlike.BoardLikeResDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

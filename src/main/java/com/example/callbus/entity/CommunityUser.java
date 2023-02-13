@@ -1,7 +1,7 @@
 package com.example.callbus.entity;
 
 import com.example.callbus.enums.AccountType;
-import com.example.callbus.web.response.CommuityUserResDTO;
+import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,8 +39,8 @@ public class CommunityUser {
     // DTO변환
     //================================================================
 
-    public CommuityUserResDTO toDTO() {
-        return CommuityUserResDTO.builder()
+    public CommunityUserResDTO toDTO() {
+        return CommunityUserResDTO.builder()
                 .id(this.id)
                 .nickname(this.nickname)
                 .accountType(this.accountType)

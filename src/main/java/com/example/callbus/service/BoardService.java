@@ -2,27 +2,24 @@ package com.example.callbus.service;
 
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
+import com.example.callbus.repository.BoardLikeRepository;
 import com.example.callbus.repository.BoardRepository;
 import com.example.callbus.repository.CommunityUserRepository;
-import com.example.callbus.web.request.BoardReqDto;
-import com.example.callbus.web.request.CommunityUserReqDto;
-import com.example.callbus.web.response.BoardListResDto;
-import com.example.callbus.web.response.BoardResDto;
+import com.example.callbus.web.request.board.BoardReqDto;
+import com.example.callbus.web.response.boardlike.BoardListResDto;
+import com.example.callbus.web.response.board.BoardResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
-
     private final BoardRepository boardRepository;
-
     private final CommunityUserRepository communityUserRepository;
 
     /**
@@ -30,20 +27,14 @@ public class BoardService {
      * @param dto
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public BoardResDto saveBoard(BoardReqDto dto, String accountId) {
 
-        Optional<CommunityUser> user = communityUserRepository.findCommunityUserByAccountId(accountId);
+        CommunityUser communityUser = communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("대상 회원이 없습니다."));
+        dto.setCommunityUser(communityUser);
+        Board savedBoard = boardRepository.save(dto.toEntity());
 
-        if (user.isPresent()) {
-            CommunityUser communityUser = user.get();
-            dto.setCommunityUser(communityUser);
-
-            Board savedBoard = boardRepository.save(dto.toEntity());
-            return savedBoard.toDTO();
-        } else {
-            throw new RuntimeException("대상 회원이 없습니다.");
-        }
+        return savedBoard.toDTO();
 
     }
 
@@ -52,18 +43,15 @@ public class BoardService {
      * @param boardId
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class)
-    public BoardResDto findBoard(Long boardId) {
+    @Transactional
+    public BoardResDto findBoard(Long boardId, String accountId) {
 
-        Optional<Board> findedBoard = boardRepository.findBoardAndUser(boardId);
+        communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("대상 회원이 없습니다."));
+        Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
+        board.getCommunityUser();
 
-        if (findedBoard.isPresent()) {
-            Board board = findedBoard.get();
-            CommunityUser communityUser = board.getCommunityUser();
-            return board.toDTO();
-        } else {
-            throw new RuntimeException("해당 게시글을 찾을 수 없습니다.");
-        }
+
+        return board.toDTO();
 
     }
 
@@ -71,20 +59,19 @@ public class BoardService {
      * 게시글 목록 조회
      * @return
      */
-    public BoardListResDto findBoardList() {
+    @Transactional
+    public BoardListResDto findBoardList(String accountId) {
 
-//        List<Board> list = boardRepository.findAll();
         List<Board> list = boardRepository.findBoardList();
-
         if (list.isEmpty()) {
             throw new RuntimeException("게시글을 찾을 수 없습니다.");
         }
 
-        List<BoardResDto> boardResDtoList = list.stream()
-                                        .map((board) -> {
-                                            return board.toDTO();
-                                        })
-                                        .collect(Collectors.toList());
+        List<BoardResDto> boardResDtoList = list.stream().map((board) -> {
+                                                            return board.toDTO();
+                                                         })
+                                                         .collect(Collectors.toList());
+
         BoardListResDto boardListResDto = BoardListResDto.builder().items(boardResDtoList).build();
 
 
@@ -100,19 +87,12 @@ public class BoardService {
      * @return
      */
 
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public BoardResDto updateBoard(Long boardId, BoardReqDto dto) {
 
-        Optional<Board> findedBoard = boardRepository.findById(boardId);
-
-        if (findedBoard.isPresent()) {
-            Board board = findedBoard.get();
-            board.update(dto);
-            return board.toDTO();
-
-        } else {
-            throw new RuntimeException("해당 게시글을 찾을 수 없습니다.");
-        }
+        Board board = boardRepository.findBoardByIdAndDeleteYn(boardId, dto.getDeleteYn()).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
+        board.update(dto);
+        return board.toDTO();
 
     }
 
@@ -120,16 +100,11 @@ public class BoardService {
      * 게시글 삭제
      * @param boardId
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public void deleteBoard(Long boardId) {
 
-        Optional<Board> findedBoard = boardRepository.findById(boardId);
-
-        if (findedBoard.isPresent()) {
-            boardRepository.deleteById(boardId);
-        } else {
-            throw new RuntimeException("해당 게시글을 찾을 수 없습니다.");
-        }
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
+        board.delete();
 
     }
 

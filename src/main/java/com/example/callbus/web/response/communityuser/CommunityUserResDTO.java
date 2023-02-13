@@ -1,14 +1,12 @@
-package com.example.callbus.web.response;
+package com.example.callbus.web.response.communityuser;
 
 import com.example.callbus.enums.AccountType;
 import lombok.*;
 
-import javax.persistence.*;
-
 @Getter
 @Setter
 @Builder
-public class CommuityUserResDTO {
+public class CommunityUserResDTO {
 
     private Long id;
     private String nickname;

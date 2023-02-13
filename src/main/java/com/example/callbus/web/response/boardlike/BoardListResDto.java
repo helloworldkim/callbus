@@ -1,5 +1,6 @@
-package com.example.callbus.web.response;
+package com.example.callbus.web.response.boardlike;
 
+import com.example.callbus.web.response.board.BoardResDto;
 import lombok.Builder;
 import lombok.Getter;
 

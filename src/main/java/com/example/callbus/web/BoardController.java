@@ -1,13 +1,10 @@
 package com.example.callbus.web;
 
 import com.example.callbus.service.BoardService;
-import com.example.callbus.service.CommunityUserService;
-import com.example.callbus.web.request.BoardReqDto;
-import com.example.callbus.web.response.BoardListResDto;
-import com.example.callbus.web.response.BoardResDto;
+import com.example.callbus.web.request.board.BoardReqDto;
+import com.example.callbus.web.response.boardlike.BoardListResDto;
+import com.example.callbus.web.response.board.BoardResDto;
 import com.example.callbus.web.response.CommonResponseDto;
-import com.example.callbus.web.response.CommuityUserResDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,9 +25,11 @@ public class BoardController {
      * @throws Exception
      */
     @GetMapping("/api/v1/board/list")
-    private ResponseEntity<?> findBoardList() throws Exception{
+    private ResponseEntity<?> findBoardList(HttpServletRequest request) throws Exception{
+        String accountId = (String) request.getAttribute("accountId");
 
-        BoardListResDto BoardListResDto = boardService.findBoardList();
+
+        BoardListResDto BoardListResDto = boardService.findBoardList(accountId);
 
         CommonResponseDto<?> data = CommonResponseDto.builder()
                 .code(HttpStatus.OK.value())
@@ -43,9 +41,10 @@ public class BoardController {
     }
 
     @GetMapping("/api/v1/board/{boardId}")
-    private ResponseEntity<?> findBoardById(@PathVariable Long boardId) throws Exception{
+    private ResponseEntity<?> findBoardById(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
+        String accountId = (String) request.getAttribute("accountId");
 
-        BoardResDto boardResDto = boardService.findBoard(boardId);
+        BoardResDto boardResDto = boardService.findBoard(boardId, accountId);
 
         CommonResponseDto<?> data = CommonResponseDto.builder()
                 .code(HttpStatus.OK.value())
@@ -64,9 +63,7 @@ public class BoardController {
      */
     @PostMapping("/api/v1/board")
     private ResponseEntity<?> saveBoard(@RequestBody @Valid BoardReqDto dto, HttpServletRequest request) throws Exception {
-
         String accountId = (String) request.getAttribute("accountId");
-        System.out.println("accountId = " + accountId);
 
         BoardResDto boardResDto = boardService.saveBoard(dto, accountId);
 
@@ -82,9 +79,7 @@ public class BoardController {
      * @return
      */
     @PutMapping("/api/v1/board/{boardId}")
-    private ResponseEntity<?> updateBoard(@RequestBody @Valid BoardReqDto dto, @PathVariable Long boardId) {
-
-
+    private ResponseEntity<?> updateBoard(@RequestBody @Valid BoardReqDto dto, @PathVariable Long boardId) throws Exception {
         BoardResDto boardResDto = boardService.updateBoard(boardId, dto);
 
         CommonResponseDto<?> data = CommonResponseDto.builder()
@@ -101,8 +96,7 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/api/v1/board/{boardId}")
-    private ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
-
+    private ResponseEntity<?> deleteBoard(@PathVariable Long boardId) throws Exception {
         boardService.deleteBoard(boardId);
 
         CommonResponseDto<?> data = CommonResponseDto.builder()

@@ -12,9 +12,11 @@ import java.util.Optional;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Query(" select b from Board b join fetch b.communityUser where b.id = :boardId")
+    @Query(" select b from Board b join fetch b.communityUser where b.id = :boardId and b.deleteYn ='N'")
     public Optional<Board> findBoardAndUser(@Param("boardId") Long boardId);
 
-    @Query("select b, (select count(l) from BoardLike l where l.board.id in (b.id) group by b.id) as cnt from Board b join fetch b.communityUser")
+    @Query("select b from Board b join fetch b.communityUser where b.deleteYn ='N'")
     List<Board> findBoardList();
+
+    Optional<Board> findBoardByIdAndDeleteYn(Long boardId, String deleteYn);
 }

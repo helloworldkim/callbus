@@ -6,7 +6,7 @@ import com.example.callbus.entity.CommunityUser;
 import com.example.callbus.repository.BoardLikeRepository;
 import com.example.callbus.repository.BoardRepository;
 import com.example.callbus.repository.CommunityUserRepository;
-import com.example.callbus.web.response.BoardLikeResDto;
+import com.example.callbus.web.response.boardlike.BoardLikeResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,25 +26,21 @@ public class BoardLikeService {
      * @param boardId
      * @param accountId
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public BoardLikeResDto saveBoardLike(Long boardId, String accountId) {
 
-        Optional<BoardLike> boardLikePs = boardLikeRepository.findBoardLike(boardId, accountId);
+        CommunityUser user = communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("회원이 없습니다."));
+        Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("대상 게시글이 없습니다."));
 
-        if (!boardLikePs.isPresent()) {
+        /* 좋아요 여부 확인 */
+        boardLikeRepository.findBoardLikeByCommunityUserAndBoard(user, board).ifPresent((boardLike) -> {
+                                                                                throw new RuntimeException("좋아요를 이미 누르셨습니다.");
+                                                                             });
 
-            Optional<CommunityUser> user = communityUserRepository.findCommunityUserByAccountId(accountId);
-            Optional<Board> board = boardRepository.findById(boardId);
-            Board boardPs = board.get();
-            CommunityUser userPs = user.get();
+        BoardLike boardLike = BoardLike.builder().board(board).communityUser(user).build();
+        BoardLike save = boardLikeRepository.save(boardLike);
 
-            BoardLike boardLike = BoardLike.builder().board(boardPs).communityUser(userPs).build();
-            BoardLike save = boardLikeRepository.save(boardLike);
-
-            return save.toDTO();
-        } else {
-            throw new RuntimeException("좋아요를 이미 누르셨습니다.");
-        }
+        return save.toDTO();
 
     }
 
@@ -53,18 +49,13 @@ public class BoardLikeService {
      * @param boardId
      * @param accountId
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public void deleteBoardLike(Long boardId, String accountId) {
+        CommunityUser user = communityUserRepository.findCommunityUserByAccountId(accountId).orElseThrow(() -> new RuntimeException("회원이 없습니다."));
+        Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("대상 게시글이 없습니다."));
 
-        Optional<BoardLike> boardLike = boardLikeRepository.findBoardLike(boardId, accountId);
-
-        if (boardLike.isPresent()) {
-            BoardLike boardLikePs = boardLike.get();
-            boardLikeRepository.deleteById(boardLikePs.getId());
-        } else {
-            throw new RuntimeException("삭제할 좋아요가 없습니다.");
-        }
-
+        BoardLike boardLike = boardLikeRepository.findBoardLikeByCommunityUserAndBoard(user, board).orElseThrow(() -> new RuntimeException("삭제할 좋아요가 없습니다."));
+        boardLikeRepository.deleteById(boardLike.getId());
 
     }
 

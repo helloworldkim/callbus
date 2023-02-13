@@ -1,11 +1,10 @@
-package com.example.callbus.web.request;
+package com.example.callbus.web.request.communityuser;
 
 import com.example.callbus.entity.CommunityUser;
 import com.example.callbus.enums.AccountType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Getter

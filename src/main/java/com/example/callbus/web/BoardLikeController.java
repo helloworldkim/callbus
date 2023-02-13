@@ -19,12 +19,16 @@ public class BoardLikeController {
     private final BoardLikeService boardLikeService;
 
 
+    /**
+     * 게시글 좋아요 등록
+     * @param boardId
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/api/v1/like/{boardId}")
-    private ResponseEntity<?> boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) {
-        //특정 게시글 좋아요 누를때 필요한 값
-        // 게시글 번호, 유저번호
+    private ResponseEntity<?> boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
-        System.out.println("accountId = " + accountId);
 
         boardLikeService.saveBoardLike(boardId, accountId);
 
@@ -32,12 +36,15 @@ public class BoardLikeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    /**
+     * 게시글 좋아요 삭제
+     * @param boardId
+     * @param request
+     * @return
+     */
     @DeleteMapping("/api/v1/like/{boardId}")
     private ResponseEntity<?> boardLikeDelete(@PathVariable Long boardId, HttpServletRequest request) {
-        //특정 게시글 좋아요 삭제할때 필요한 값
-        // 게시글 번호, 유저번호
         String accountId = (String) request.getAttribute("accountId");
-        System.out.println("accountId = " + accountId);
 
         boardLikeService.deleteBoardLike(boardId, accountId);
 
