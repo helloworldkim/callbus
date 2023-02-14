@@ -88,7 +88,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if (!result) {
-            log.debug("호출된 API accountTypes : {}", accountTypes);
+            log.debug("AccountType result : {}", result);
             throw new RuntimeException("요청 권한이 없습니다");
         }
 
