@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,23 +29,11 @@ public class UserController {
     /**
      * 회원등록
      * @param communityUserReqDto
-     * @param bindingResult
      * @return
      */
     @PreAuthorize(hasRole = {AccountType.OTHER})
     @PostMapping("/api/v1/regist")
-    public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto, BindingResult bindingResult) {
-
-        /* Validation 에러확인 */
-        if (bindingResult.hasErrors()) {
-            HashMap<String, String> errorMap = new HashMap<>();
-
-            for (FieldError fieldFieldError : bindingResult.getFieldErrors()) {
-                errorMap.put(fieldFieldError.getField(),fieldFieldError.getDefaultMessage());
-            }
-
-            throw new RuntimeException(errorMap.toString());
-        }
+    public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto) {
 
         CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(communityUserReqDto);
 

@@ -1,4 +1,4 @@
-package com.example.callbus.web.Interceptor;
+package com.example.callbus.web.interceptor;
 
 import com.example.callbus.consts.GlobalConst;
 import com.example.callbus.enums.AccountType;
@@ -11,8 +11,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Component

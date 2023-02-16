@@ -1,6 +1,6 @@
 package com.example.callbus.web.config;
 
-import com.example.callbus.web.Interceptor.AuthInterceptor;
+import com.example.callbus.web.interceptor.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
