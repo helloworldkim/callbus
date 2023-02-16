@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -42,7 +43,6 @@ public class BoardService {
      * @param boardId
      * @return
      */
-    @Transactional
     public BoardResDto findBoard(Long boardId) {
 
         Board board = boardRepository.findBoardAndUser(boardId).orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
@@ -55,7 +55,6 @@ public class BoardService {
      * 게시글 목록 조회
      * @return
      */
-    @Transactional
     public BoardListResDto findBoardList() {
 
         List<Board> list = boardRepository.findBoardList();
