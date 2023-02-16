@@ -1,9 +1,7 @@
 package com.example.callbus.web;
 
-import com.example.callbus.consts.GlobalConst;
-import com.example.callbus.entity.BoardLike;
-import com.example.callbus.enums.AccountType;
-import com.example.callbus.web.request.board.BoardReqDto;
+import com.example.callbus.consts.enums.AccountType;
+import com.example.callbus.consts.responsecode.SuccessCode;
 import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -73,13 +70,13 @@ class UserControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        String nickname = dc.read("$.body.nickname");
-        String accountType = dc.read("$.body.accountType");
-        String accountId = dc.read("$.body.accountId");
-        String quit = dc.read("$.body.quit");
+        String code = dc.read("$.code");
+        String nickname = dc.read("$.data.nickname");
+        String accountType = dc.read("$.data.accountType");
+        String accountId = dc.read("$.data.accountId");
+        String quit = dc.read("$.data.quit");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
+        assertThat(code).isEqualTo(SuccessCode.SUCCESS.getCode());
         assertThat(nickname).isEqualTo(communityUserReqDto.getNickname());
         assertThat(accountType).isEqualTo(communityUserReqDto.getAccountType());
         assertThat(accountId).isEqualTo(communityUserReqDto.getAccountId());

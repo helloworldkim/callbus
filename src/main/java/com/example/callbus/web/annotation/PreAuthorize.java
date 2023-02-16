@@ -1,6 +1,6 @@
 package com.example.callbus.web.annotation;
 
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
 import java.lang.annotation.*;
 
 /**

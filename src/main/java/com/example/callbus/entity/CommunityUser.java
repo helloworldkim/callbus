@@ -1,6 +1,6 @@
 package com.example.callbus.entity;
 
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
 import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.*;
 

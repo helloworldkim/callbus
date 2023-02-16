@@ -1,12 +1,11 @@
 package com.example.callbus.web;
 
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
+import com.example.callbus.consts.responsecode.SuccessCode;
 import com.example.callbus.service.BoardLikeService;
 import com.example.callbus.web.annotation.PreAuthorize;
-import com.example.callbus.web.response.CommonResponseDto;
+import com.example.callbus.web.response.ApiResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,13 +29,10 @@ public class BoardLikeController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PostMapping("/api/v1/like/{boardId}")
-    private ResponseEntity<?> boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
+    private ApiResponseDTO boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
-
         boardLikeService.saveBoardLike(boardId, accountId);
-
-        CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("좋아요 등록 완료").build();
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ApiResponseDTO(SuccessCode.SUCCESS, "좋아요 등록 완료");
     }
 
     /**
@@ -47,13 +43,10 @@ public class BoardLikeController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @DeleteMapping("/api/v1/like/{boardId}")
-    private ResponseEntity<?> boardLikeDelete(@PathVariable Long boardId, HttpServletRequest request) {
+    private ApiResponseDTO boardLikeDelete(@PathVariable Long boardId, HttpServletRequest request) {
         String accountId = (String) request.getAttribute("accountId");
-
         boardLikeService.deleteBoardLike(boardId, accountId);
-
-        CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("좋아요 삭제 완료").build();
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ApiResponseDTO(SuccessCode.SUCCESS, "좋아요 삭제 완료");
     }
 
 }

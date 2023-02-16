@@ -1,10 +1,9 @@
 package com.example.callbus.web.request.communityuser;
 
 import com.example.callbus.entity.CommunityUser;
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 

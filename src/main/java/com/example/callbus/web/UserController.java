@@ -1,24 +1,19 @@
 package com.example.callbus.web;
 
 
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
+import com.example.callbus.consts.responsecode.SuccessCode;
 import com.example.callbus.service.CommunityUserService;
 import com.example.callbus.web.annotation.PreAuthorize;
 import com.example.callbus.web.request.communityuser.CommunityUserReqDto;
-import com.example.callbus.web.response.CommonResponseDto;
+import com.example.callbus.web.response.ApiResponseDTO;
 import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,13 +28,9 @@ public class UserController {
      */
     @PreAuthorize(hasRole = {AccountType.OTHER})
     @PostMapping("/api/v1/regist")
-    public ResponseEntity<?> test(@RequestBody @Valid CommunityUserReqDto communityUserReqDto) {
-
+    public ApiResponseDTO regist(@RequestBody @Valid CommunityUserReqDto communityUserReqDto) {
         CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(communityUserReqDto);
-
-
-        CommonResponseDto<?> data = CommonResponseDto.builder().code(HttpStatus.OK.value()).msg("가입테스트").body(communityUserResDTO).build();
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ApiResponseDTO(SuccessCode.SUCCESS, "가입 완료", communityUserResDTO);
 
     }
 

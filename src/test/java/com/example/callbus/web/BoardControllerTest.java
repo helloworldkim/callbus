@@ -1,9 +1,10 @@
 package com.example.callbus.web;
 
 import com.example.callbus.consts.GlobalConst;
+import com.example.callbus.consts.responsecode.SuccessCode;
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
 import com.example.callbus.repository.BoardRepository;
 import com.example.callbus.repository.CommunityUserRepository;
 import com.example.callbus.web.request.board.BoardReqDto;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,13 +27,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-
 import java.nio.charset.Charset;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -72,7 +68,7 @@ class BoardControllerTest {
         om = new ObjectMapper();
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(GlobalConst.REQUEST_HEADER, GlobalConst.REALTOR + dto.getAccountId());
+        headers.set(GlobalConst.REQUEST_HEADER, AccountType.REALTOR + " " + dto.getAccountId());
 
 
     }
@@ -96,11 +92,12 @@ class BoardControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        String findedTitle = dc.read("$.body.items[0].title");
-        String findedContent = dc.read("$.body.items[0].content");
+        String code = dc.read("$.code");
+        String message = dc.read("$.message");
+        String findedTitle = dc.read("$.data.items[0].title");
+        String findedContent = dc.read("$.data.items[0].content");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
+        assertThat(code).isEqualTo(SuccessCode.SUCCESS.getCode());
         assertThat(findedTitle).isEqualTo(title);
         assertThat(findedContent).isEqualTo(content);
     }
@@ -124,11 +121,9 @@ class BoardControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        String findedTitle = dc.read("$.body.title");
-        String findedContent = dc.read("$.body.content");
+        String findedTitle = dc.read("$.data.title");
+        String findedContent = dc.read("$.data.content");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
         assertThat(findedTitle).isEqualTo(title);
         assertThat(findedContent).isEqualTo(content);
 
@@ -156,11 +151,9 @@ class BoardControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        String findedTitle = dc.read("$.body.title");
-        String findedContent = dc.read("$.body.content");
+        String findedTitle = dc.read("$.data.title");
+        String findedContent = dc.read("$.data.content");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
         assertThat(findedTitle).isEqualTo(dto.getTitle());
         assertThat(findedContent).isEqualTo(dto.getContent());
 
@@ -188,11 +181,9 @@ class BoardControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        String findedTitle = dc.read("$.body.title");
-        String findedContent = dc.read("$.body.content");
+        String findedTitle = dc.read("$.data.title");
+        String findedContent = dc.read("$.data.content");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
         assertThat(findedTitle).isEqualTo(dto.getTitle());
         assertThat(findedContent).isEqualTo(dto.getContent());
     }
@@ -215,8 +206,9 @@ class BoardControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
+        String code = dc.read("$.code");
+
+        assertThat(code).isEqualTo(SuccessCode.SUCCESS.getCode());
 
     }
 

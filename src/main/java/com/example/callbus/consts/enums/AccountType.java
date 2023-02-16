@@ -1,11 +1,9 @@
-package com.example.callbus.enums;
+package com.example.callbus.consts.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor

@@ -1,10 +1,11 @@
 package com.example.callbus.web;
 
 import com.example.callbus.consts.GlobalConst;
+import com.example.callbus.consts.responsecode.SuccessCode;
 import com.example.callbus.entity.Board;
 import com.example.callbus.entity.BoardLike;
 import com.example.callbus.entity.CommunityUser;
-import com.example.callbus.enums.AccountType;
+import com.example.callbus.consts.enums.AccountType;
 import com.example.callbus.repository.BoardLikeRepository;
 import com.example.callbus.repository.BoardRepository;
 import com.example.callbus.repository.CommunityUserRepository;
@@ -33,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -75,7 +75,7 @@ class BoardLikeControllerTest {
         om = new ObjectMapper();
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(GlobalConst.REQUEST_HEADER, GlobalConst.REALTOR + dto.getAccountId());
+        headers.set(GlobalConst.REQUEST_HEADER, AccountType.REALTOR + " " + dto.getAccountId());
 
     }
 
@@ -97,9 +97,9 @@ class BoardLikeControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
+        String code = dc.read("$.code");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
+        assertThat(code).isEqualTo(SuccessCode.SUCCESS.getCode());
 
     }
 
@@ -123,9 +123,9 @@ class BoardLikeControllerTest {
 
         //then
         DocumentContext dc = JsonPath.parse(mvcResult.getResponse().getContentAsString(Charset.forName("UTF-8"))); // jway
-        int code = dc.read("$.code");
+        String code = dc.read("$.code");
 
-        assertThat(code).isEqualTo(HttpStatus.OK.value());
+        assertThat(code).isEqualTo(SuccessCode.SUCCESS.getCode());
 
     }
 }
