@@ -19,7 +19,7 @@ public class CommunityUserResDTO {
         this.id = id;
         this.nickname = nickname;
         this.accountType = accountType;
-        this.accountTypeName = AccountType.getAccountTypeName(accountType);
+        this.accountTypeName = accountType.getDescription();
         this.accountId = accountId;
         this.quit = quit;
     }

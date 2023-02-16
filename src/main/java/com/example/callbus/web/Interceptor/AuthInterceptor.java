@@ -18,10 +18,10 @@ import java.util.Map;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        try {
             String requestURI					= request.getRequestURI();
             String authentication				= request.getHeader(GlobalConst.REQUEST_HEADER); /** 구분 값 */
 
@@ -30,42 +30,44 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 
             if (StringUtils.isBlank(authentication)) {
-                PreAuthorizeRoleCheck(handler, AccountType.OTHER);
+                preAuthorizeRoleCheck(handler, AccountType.OTHER);
                 return true;
             }
+            String[] authenticationArray = authentication.split(" "); // 요청권한 + " " + accountId형태
+            String role = authenticationArray[0].toUpperCase();
+            String accountId = authenticationArray[1];
 
-            String accountId = "";
-            if (authentication.startsWith(GlobalConst.REALTOR)) {
-                PreAuthorizeRoleCheck(handler, AccountType.REALTOR);
-                accountId = authentication.replace(GlobalConst.REALTOR, "");
-            } else if (authentication.startsWith(GlobalConst.LESSOR)) {
-                PreAuthorizeRoleCheck(handler, AccountType.LESSOR);
-                accountId = authentication.replace(GlobalConst.LESSOR, "");
-            } else if (authentication.startsWith(GlobalConst.LESSEE)) {
-                PreAuthorizeRoleCheck(handler, AccountType.LESSEE);
-                accountId = authentication.replace(GlobalConst.LESSEE, "");
-            } else {
-                throw new RuntimeException("부적절한 요청 입니다.");
-            }
+            validAccountType(handler, AccountType.getAccountType(role));
+
 
             request.setAttribute("accountId", accountId);
             return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("msg", "권한이 없습니다.");
-            throw new RuntimeException(errorMap.toString());
+
+
+
+    }
+
+    /**
+     * 계정 권한타입 별 권한체크 로직 수행
+     * @param handler
+     * @param accountType
+     */
+    private void validAccountType(Object handler, AccountType accountType) {
+        switch (accountType) {
+            case  REALTOR : preAuthorizeRoleCheck(handler, AccountType.REALTOR); break;
+            case  LESSOR: preAuthorizeRoleCheck(handler, AccountType.LESSOR); break;
+            case  LESSEE: preAuthorizeRoleCheck(handler, AccountType.LESSEE); break;
+            default:
+                throw new RuntimeException("부적절한 요청 입니다.");
         }
-
-
     }
 
     /**
      * 요청 컨트롤러의 메서드별 권한체크 수행
      * @param handler
      */
-    private void PreAuthorizeRoleCheck(Object handler, AccountType requestAccountType) {
+    private void preAuthorizeRoleCheck(Object handler, AccountType requestAccountType) {
         /** 현재 요청한 메서드의 어노테이션 가져오기.*/
         HandlerMethod method = (HandlerMethod) handler;
         PreAuthorize preAuthorizeAnnotation = method.getMethodAnnotation(PreAuthorize.class);

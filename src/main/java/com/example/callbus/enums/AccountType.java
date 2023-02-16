@@ -16,13 +16,18 @@ public enum AccountType {
     OTHER("OTHER", "외부사용자");
 
     private final String role;
-    private final String code;
+    private final String description;
 
-    public static String getAccountTypeName(AccountType accountType) {
-        AccountType matchedType = Arrays.stream(AccountType.values())
-                .filter(accountTypes -> accountTypes.getCode().equals(accountType.getCode()))
+
+    /**
+     * role을 받아서 해당 AccountType을 반환하는 메서드
+     * @param role
+     * @return
+     */
+    public static AccountType getAccountType(String role) {
+        return Arrays.stream(AccountType.values())
+                .filter(accountTypes -> accountTypes.getRole().equals(role))
                 .findFirst()
                 .orElse(AccountType.OTHER);
-        return matchedType.getCode();
     }
 }
