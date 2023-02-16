@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +25,8 @@ public class CommunityUserService {
     public CommunityUserResDTO saveUser(CommunityUserReqDto dto) {
 
         validateDuplicateMember(dto.toEntity());
-        CommunityUser savedUser = commuityUserRepository.save(dto.toEntity());
+        CommunityUser communityUser = dto.toEntity();
+        CommunityUser savedUser = commuityUserRepository.save(communityUser);
         return savedUser.toDTO();
 
     }

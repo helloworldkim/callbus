@@ -10,22 +10,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+ import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@Transactional
 class CommunityUserServiceTest {
 
-    @InjectMocks
+    @Autowired
     private CommunityUserService communityUserService;
-
-    @Mock
-    private CommunityUserRepository communityUserRepository;
 
     @Test
     @DisplayName("회원가입 테스트")
@@ -38,9 +42,6 @@ class CommunityUserServiceTest {
         dto.setAccountType(AccountType.REALTOR.name());
         dto.setQuit("N");
 
-        //stub
-        when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
-
         //when
         CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(dto);
 
@@ -49,6 +50,32 @@ class CommunityUserServiceTest {
         assertThat(communityUserResDTO.getAccountId()).isEqualTo(dto.getAccountId());
         assertThat(communityUserResDTO.getAccountType().name()).isEqualTo(dto.getAccountType());
         assertThat(communityUserResDTO.getQuit()).isEqualTo(dto.getQuit());
+
+    }
+
+    @Test
+    @DisplayName("중복 회원가입 테스트")
+    void duplicatedSaveUser() {
+
+        //given
+        CommunityUserReqDto dto1 = new CommunityUserReqDto();
+        dto1.setNickname("john");
+        dto1.setAccountId("123");
+        dto1.setAccountType(AccountType.REALTOR.name());
+        dto1.setQuit("N");
+        CommunityUserReqDto dto2 = new CommunityUserReqDto();
+        dto2.setNickname("john");
+        dto2.setAccountId("123");
+        dto2.setAccountType(AccountType.REALTOR.name());
+        dto2.setQuit("N");
+
+
+        //when
+        CommunityUserResDTO communityUserResDTO = communityUserService.saveUser(dto1);
+        //then
+        assertThrows(IllegalStateException.class, () -> communityUserService.saveUser(dto2));
+
+
 
     }
 
@@ -63,11 +90,7 @@ class CommunityUserServiceTest {
         dto.setAccountId("123");
         dto.setAccountType(AccountType.REALTOR.name());
         dto.setQuit("N");
-        when(communityUserRepository.save(any())).thenReturn(dto.toEntity());
         communityUserService.saveUser(dto);
-
-        //stub
-        when(communityUserRepository.findCommunityUserByAccountId(any())).thenReturn(Optional.ofNullable(dto.toEntity()));
 
         //when
         CommunityUserResDTO communityUserResDTO = communityUserService.findCommunityUserByAccountId(accountId);
