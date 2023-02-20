@@ -1,6 +1,7 @@
 package com.example.callbus.web.response.communityuser;
 
 import com.example.callbus.consts.enums.AccountType;
+import com.example.callbus.entity.CommunityUser;
 import lombok.*;
 
 @Getter
@@ -22,5 +23,15 @@ public class CommunityUserResDTO {
         this.accountTypeName = accountType.getDescription();
         this.accountId = accountId;
         this.quit = quit;
+    }
+
+    @Builder
+    public CommunityUserResDTO(CommunityUser communityUser) {
+        this.id = communityUser.getId();
+        this.nickname = communityUser.getNickname();
+        this.accountType = communityUser.getAccountType();
+        this.accountTypeName = communityUser.getAccountType().getDescription();
+        this.accountId = communityUser.getAccountId();
+        this.quit = communityUser.getQuit();
     }
 }

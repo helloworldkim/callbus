@@ -1,5 +1,6 @@
 package com.example.callbus.web.response.board;
 
+import com.example.callbus.entity.Board;
 import com.example.callbus.entity.CommunityUser;
 import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -35,4 +36,26 @@ public class BoardResDto {
         this.deleteYn = deleteYn;
         this.likeYn = likeYn;
     }
+    @Builder
+    public BoardResDto(Board board, Long likeYn) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.communityUser = board.getCommunityUser().toDTO();
+        this.likeCount = board.getLikeCount();
+        this.createdDatetime = board.getCreatedDateTime();
+        this.lastModifiedDatetime = board.getLastModifiedDateTime();
+        this.deleteYn = board.getDeleteYn();
+//        this.likeYn = getLikeYnValue(likeYn);
+        this.likeYn = getLikeYnValue(likeYn);
+    }
+
+    private String getLikeYnValue(Long likeYn) {
+        if (likeYn > 0) {
+            return "Y";
+        } else {
+            return "N";
+        }
+    }
+
 }

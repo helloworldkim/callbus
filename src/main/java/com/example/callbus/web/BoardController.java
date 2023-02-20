@@ -29,7 +29,8 @@ public class BoardController {
     @GetMapping("/api/v1/board/list")
     private ApiResponseDTO findBoardList(HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
-        BoardListResDto BoardListResDto = boardService.findBoardList();
+//        BoardListResDto BoardListResDto = boardService.findBoardList();
+        BoardListResDto BoardListResDto = boardService.findBoardListByQureydsl(accountId);
         return new ApiResponseDTO(SuccessCode.SUCCESS, "게시글 목록 조회", BoardListResDto);
     }
 

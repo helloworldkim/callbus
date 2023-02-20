@@ -75,6 +75,22 @@ public class BoardService {
 
     }
 
+    public BoardListResDto findBoardListByQureydsl(String accountId) {
+
+        List<BoardResDto> list = boardRepository.findBoardListWithQuerydsl(accountId);
+        if (list.isEmpty()) {
+            throw new RuntimeException("게시글을 찾을 수 없습니다.");
+        }
+        list.stream().forEach(boardResDto -> boardResDto.getCommunityUser());
+
+        BoardListResDto boardListResDto = BoardListResDto.builder().items(list).build();
+
+
+        return boardListResDto;
+
+
+    }
+
     /**
      * 게시글 수정
      * @param boardId
