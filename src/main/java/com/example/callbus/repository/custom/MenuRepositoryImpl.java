@@ -26,7 +26,7 @@ public class MenuRepositoryImpl implements MenuCustomRepositroy {
         QMenu child = new QMenu("child");
 
         return queryFactory.selectFrom(parent)
-                .distinct()
+//                .distinct()
                 .leftJoin(parent.children, child)
                 .fetchJoin()
                 .where(
