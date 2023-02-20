@@ -1,8 +1,9 @@
 package com.example.callbus.repository.custom;
 
-import com.example.callbus.entity.QCommunityUser;
+import com.example.callbus.entity.Menu;
+import com.example.callbus.entity.QMenu;
 import com.example.callbus.web.response.board.BoardResDto;
-import com.example.callbus.web.response.communityuser.CommunityUserResDTO;
+import com.example.callbus.web.response.menu.MenuResDTO;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -16,23 +17,24 @@ import static com.querydsl.jpa.JPAExpressions.select;
 
 
 @RequiredArgsConstructor
-public class BoardRepositoryImpl implements BoardCustomRepositroy {
+public class MenuRepositoryImpl implements MenuCustomRepositroy {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<BoardResDto> findBoardListWithQuerydsl(String accountId) {
+    public List<Menu> findMenuListWithQuerydsl() {
+        QMenu parent = new QMenu("parent");
+        QMenu child = new QMenu("child");
 
-        return queryFactory.select(constructor(BoardResDto.class
-                , board
-                    , select(boardLike.count())
-                      .from(boardLike)
-                      .where(boardLike.communityUser.accountId.eq(accountId))
-                    )
-                )
-                .from(board)
-                .join(board.communityUser, communityUser)
+        return queryFactory.selectFrom(parent)
+                .distinct()
+                .leftJoin(parent.children, child)
                 .fetchJoin()
+                .where(
+                        parent.parent.isNull()
+                )
+                .orderBy(parent.listOrder.asc(), child.listOrder.asc())
                 .fetch();
+
     }
 
 }

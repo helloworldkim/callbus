@@ -1,4 +1,4 @@
-package com.example.callbus.web;
+package com.example.callbus.web.controller;
 
 import com.example.callbus.consts.enums.AccountType;
 import com.example.callbus.consts.responsecode.SuccessCode;
@@ -27,7 +27,7 @@ public class BoardController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR, AccountType.OTHER})
     @GetMapping("/api/v1/board/list")
-    private ApiResponseDTO findBoardList(HttpServletRequest request) throws Exception{
+    public ApiResponseDTO findBoardList(HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
 //        BoardListResDto BoardListResDto = boardService.findBoardList();
         BoardListResDto BoardListResDto = boardService.findBoardListByQureydsl(accountId);
@@ -43,7 +43,7 @@ public class BoardController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR, AccountType.OTHER})
     @GetMapping("/api/v1/board/{boardId}")
-    private ApiResponseDTO findBoardById(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
+    public ApiResponseDTO findBoardById(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
 
         BoardResDto boardResDto = boardService.findBoard(boardId);
@@ -58,7 +58,7 @@ public class BoardController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PostMapping("/api/v1/board")
-    private ApiResponseDTO saveBoard(@RequestBody @Valid BoardReqDto dto, HttpServletRequest request) throws Exception {
+    public ApiResponseDTO saveBoard(@RequestBody @Valid BoardReqDto dto, HttpServletRequest request) throws Exception {
         String accountId = (String) request.getAttribute("accountId");
 
         BoardResDto boardResDto = boardService.saveBoard(dto, accountId);
@@ -74,7 +74,7 @@ public class BoardController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PutMapping("/api/v1/board/{boardId}")
-    private ApiResponseDTO updateBoard(@RequestBody @Valid BoardReqDto dto, @PathVariable Long boardId) throws Exception {
+    public ApiResponseDTO updateBoard(@RequestBody @Valid BoardReqDto dto, @PathVariable Long boardId) throws Exception {
         BoardResDto boardResDto = boardService.updateBoard(boardId, dto);
 
         return new ApiResponseDTO(SuccessCode.SUCCESS, "게시글 수정 완료", boardResDto);
@@ -87,7 +87,7 @@ public class BoardController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @DeleteMapping("/api/v1/board/{boardId}")
-    private ApiResponseDTO deleteBoard(@PathVariable Long boardId) throws Exception {
+    public ApiResponseDTO deleteBoard(@PathVariable Long boardId) throws Exception {
         boardService.deleteBoard(boardId);
         return new ApiResponseDTO(SuccessCode.SUCCESS, "게시글 삭제 완료");
     }

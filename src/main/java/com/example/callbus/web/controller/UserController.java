@@ -1,4 +1,4 @@
-package com.example.callbus.web;
+package com.example.callbus.web.controller;
 
 
 import com.example.callbus.consts.enums.AccountType;

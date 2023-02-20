@@ -1,4 +1,4 @@
-package com.example.callbus.web;
+package com.example.callbus.web.controller;
 
 import com.example.callbus.consts.enums.AccountType;
 import com.example.callbus.consts.responsecode.SuccessCode;
@@ -29,7 +29,7 @@ public class BoardLikeController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @PostMapping("/api/v1/like/{boardId}")
-    private ApiResponseDTO boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
+    public ApiResponseDTO boardLikeSave(@PathVariable Long boardId, HttpServletRequest request) throws Exception{
         String accountId = (String) request.getAttribute("accountId");
         boardLikeService.saveBoardLike(boardId, accountId);
         return new ApiResponseDTO(SuccessCode.SUCCESS, "좋아요 등록 완료");
@@ -43,7 +43,7 @@ public class BoardLikeController {
      */
     @PreAuthorize(hasRole = {AccountType.LESSEE, AccountType.REALTOR, AccountType.LESSOR})
     @DeleteMapping("/api/v1/like/{boardId}")
-    private ApiResponseDTO boardLikeDelete(@PathVariable Long boardId, HttpServletRequest request) {
+    public ApiResponseDTO boardLikeDelete(@PathVariable Long boardId, HttpServletRequest request) {
         String accountId = (String) request.getAttribute("accountId");
         boardLikeService.deleteBoardLike(boardId, accountId);
         return new ApiResponseDTO(SuccessCode.SUCCESS, "좋아요 삭제 완료");
