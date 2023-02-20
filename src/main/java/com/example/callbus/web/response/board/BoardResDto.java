@@ -43,10 +43,9 @@ public class BoardResDto {
         this.content = board.getContent();
         this.communityUser = board.getCommunityUser().toDTO();
         this.likeCount = board.getLikeCount();
-        this.createdDatetime = board.getCreatedDateTime();
-        this.lastModifiedDatetime = board.getLastModifiedDateTime();
+        this.createdDatetime = board.getCreatedDatetime();
+        this.lastModifiedDatetime = board.getLastModifiedDatetime();
         this.deleteYn = board.getDeleteYn();
-//        this.likeYn = getLikeYnValue(likeYn);
         this.likeYn = getLikeYnValue(likeYn);
     }
 
